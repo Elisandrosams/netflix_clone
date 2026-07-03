@@ -15,7 +15,7 @@ const [apiData, setApiData] = useState({
   typeof: ""
 })
 
-useEffect(()=>{
+useEffect (()=>{
 const options = {
   method: 'GET',
   headers: {
