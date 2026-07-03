@@ -23,13 +23,17 @@ const options = {
     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NTQxNzcyNGVjMzRlYTVlNDMwNmVlYWEyMTVhMzc3ZiIsIm5iZiI6MTc4MzA5NzYzNi4wNjksInN1YiI6IjZhNDdlOTI0MWEwNDNiMmI2YjgxNzdjZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Zvt4U2q4BxSkQ_-qFbZhc1oOgcUArI6brpxTcgJFPi8'
   }
 };
-fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
-  .then(res => res.json())
-  .then(res => setApiData(res.results[0]))
-  .catch(err => console.error(err));
-},[id])
+try {
+  const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
+  const data = await response.json();
 
-
+  if (!data || data.length === 0) {
+    setError("No movie information available.")
+    return;
+  }
+} catch (error) {
+  setError("Failed to load movie information.")
+}
 
   return (
     <div className="player">
