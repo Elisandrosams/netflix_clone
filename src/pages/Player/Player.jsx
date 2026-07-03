@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Player.css";
 import back_arrow_icon from "../../assets/back.png";
-import { Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const Player = () => {
 
@@ -33,7 +33,7 @@ fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
 
   return (
     <div className="player">
-      <img src={back_arrow_icon} alt="Back" onClick={()=>{Navigate(-2)}}/>
+      <Link to= "/"><img src={back_arrow_icon} alt="Back"/></Link>
       <iframe
         width="90%"
         height="90%"
