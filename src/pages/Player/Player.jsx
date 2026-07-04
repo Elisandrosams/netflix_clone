@@ -16,6 +16,7 @@ const [apiData, setApiData] = useState({
 })
 
 useEffect (()=>{
+  const getMovie = async () => {
 const options = {
   method: 'GET',
   headers: {
@@ -24,16 +25,20 @@ const options = {
   }
 };
 try {
-  const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
+  const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options);
   const data = await response.json();
 
-  if (!data || data.length === 0) {
-    setError("No movie information available.")
+  if (!data.results || data.results.length === 0) {
+    console.log("No movie information available.");
     return;
   }
+  setApiData(data.results[0]);
 } catch (error) {
-  setError("Failed to load movie information.")
+  console.log("Failed to load movie information.")
 }
+  };
+  getMovie();
+}, [id]);
 
   return (
     <div className="player">
