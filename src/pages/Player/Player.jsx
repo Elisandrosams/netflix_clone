@@ -4,45 +4,49 @@ import back_arrow_icon from "../../assets/back.png";
 import { Link, useParams } from "react-router-dom";
 
 const Player = () => {
+  const { id } = useParams();
 
-const {id} = useParams()
-  
+  const [apiData, setApiData] = useState({
+    name: "",
+    key: "",
+    published_at: "",
+    typeof: "",
+  });
 
-const [apiData, setApiData] = useState({
-  name: "",
-  key: "",
-  published_at: "",
-  typeof: ""
-})
+  useEffect(() => {
+    const getMovie = async () => {
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NTQxNzcyNGVjMzRlYTVlNDMwNmVlYWEyMTVhMzc3ZiIsIm5iZiI6MTc4MzA5NzYzNi4wNjksInN1YiI6IjZhNDdlOTI0MWEwNDNiMmI2YjgxNzdjZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Zvt4U2q4BxSkQ_-qFbZhc1oOgcUArI6brpxTcgJFPi8",
+        },
+      };
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+          options,
+        );
+        const data = await response.json();
 
-useEffect (()=>{
-  const getMovie = async () => {
-const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NTQxNzcyNGVjMzRlYTVlNDMwNmVlYWEyMTVhMzc3ZiIsIm5iZiI6MTc4MzA5NzYzNi4wNjksInN1YiI6IjZhNDdlOTI0MWEwNDNiMmI2YjgxNzdjZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Zvt4U2q4BxSkQ_-qFbZhc1oOgcUArI6brpxTcgJFPi8'
-  }
-};
-try {
-  const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options);
-  const data = await response.json();
-
-  if (!data.results || data.results.length === 0) {
-    console.log("No movie information available.");
-    return;
-  }
-  setApiData(data.results[0]);
-} catch (error) {
-  console.log("Failed to load movie information.")
-}
-  };
-  getMovie();
-}, [id]);
+        if (!data.results || data.results.length === 0) {
+          console.log("No movie information available.");
+          return;
+        }
+        setApiData(data.results[0]);
+      } catch (error) {
+        console.log("Failed to load movie information.");
+      }
+    };
+    getMovie();
+  }, [id]);
 
   return (
     <div className="player">
-      <Link to= "/"><img src={back_arrow_icon} alt="Back"/></Link>
+      <Link to="/">
+        <img src={back_arrow_icon} alt="Back" />
+      </Link>
       <iframe
         width="90%"
         height="90%"
@@ -52,7 +56,7 @@ try {
         allowFullScreen
       ></iframe>
       <div className="player-info">
-        <p>{apiData.published_at.slice(0,10)}</p>
+        <p>{apiData.published_at.slice(0, 10)}</p>
         <p>{apiData.name}</p>
         <p>{apiData.type}</p>
       </div>
